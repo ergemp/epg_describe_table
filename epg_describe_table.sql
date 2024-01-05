@@ -121,7 +121,25 @@ DECLARE
 			indexname=g_index_name
 			;	
 				
-	
+	c_table_stats cursor (g_schema_name text, g_relation_name text)	 for
+		select
+			n_live_tup,
+			n_dead_tup,
+			last_vacuum,
+			last_autovacuum,
+			last_analyze, 
+			last_autoanalyze,
+			vacuum_count, 
+			autovacuum_count, 
+			analyze_count, 
+			autoanalyze_count
+		from
+			pg_stat_all_tables
+		where 
+			relname = g_relation_name and 
+			schemaname = g_schema_name 
+			;
+				
 BEGIN
 	--raise info 'information message %', now();
 	raise info 'information for table: %.%', g_schema_name, g_relation_name;
@@ -198,8 +216,28 @@ BEGIN
 			
 	end loop;
 
+
+	raise notice '%', chr(10);
+	raise notice '----------------';		
+	raise notice 'table statistics';		
+	raise notice '----------------';		
+	raise notice '%', chr(10);
+
+	for r_table_stat in c_table_stats(g_schema_name, g_relation_name)
+	loop
+		raise notice 'dead_tuples: %', r_table_stat.n_dead_tup || chr(10);		
+		raise notice 'live_tuples: %', r_table_stat.n_live_tup || chr(10);
+		raise notice 'last_vacuum: %', r_table_stat.last_vacuum || chr(10);
+		raise notice 'last_autovacuum: %', r_table_stat.last_autovacuum || chr(10);
+		raise notice 'vacuum_count: %', r_table_stat.vacuum_count || chr(10);
+		raise notice 'autovacuum_count: %', r_table_stat.autovacuum_count || chr(10);	
+	end loop;
+
+
+
 END
 $$;
 
 
 call epg_describe_table('public','customers');
+
