@@ -1,6 +1,7 @@
 -- drop procedure epg_describe_table (text, text);
+create schema if not exists util;
 
-CREATE OR replace PROCEDURE epg_describe_table (g_schema_name IN text, g_relation_name IN text)
+CREATE OR replace PROCEDURE util.epg_describe_table (g_schema_name IN text, g_relation_name IN text)
 LANGUAGE plpgsql
 AS 
 $$
@@ -225,19 +226,27 @@ BEGIN
 
 	for r_table_stat in c_table_stats(g_schema_name, g_relation_name)
 	loop
+		/*
 		raise notice 'dead_tuples: %', r_table_stat.n_dead_tup || chr(10);		
 		raise notice 'live_tuples: %', r_table_stat.n_live_tup || chr(10);
 		raise notice 'last_vacuum: %', r_table_stat.last_vacuum || chr(10);
 		raise notice 'last_autovacuum: %', r_table_stat.last_autovacuum || chr(10);
 		raise notice 'vacuum_count: %', r_table_stat.vacuum_count || chr(10);
 		raise notice 'autovacuum_count: %', r_table_stat.autovacuum_count || chr(10);	
+		*/
+		raise notice E' dead_tuples: % \n live_tuples: % \n last_vacuum: % \n last_autovacuum: % \n vacuum_count: % \n autovacuum_count: % ' 					 , 
+			r_table_stat.n_dead_tup, 
+			r_table_stat.n_live_tup,
+			r_table_stat.last_vacuum,
+			r_table_stat.last_autovacuum,
+			r_table_stat.vacuum_count,
+			r_table_stat.autovacuum_count
+			;
 	end loop;
-
-
 
 END
 $$;
 
 
-call epg_describe_table('public','customers');
+call util.epg_describe_table('public','t_test');
 
