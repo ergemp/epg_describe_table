@@ -1,5 +1,9 @@
 # epg_describe_table
 
+epg_describe_table is a shourtcut for obtaining information on a postgresql table including table privileges, columns, statistics and indexes. This is a replacement for a describe command on the database via sql instead of using \d on psql cli. 
+
+Instead of running multiple commands for the detailed table information one function call pushes the information to the stdout with raise notice in plpgsql.
+
 ## installation
 
 epg_describe_table.sql create a function with the same name as epg_decribe_table under the util schema. If util schema does not exists, scripts tries to create the schema. So mind the privileges of the user which is executing this sql script on the postgresql database. 
