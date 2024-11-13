@@ -8,7 +8,9 @@ epg_describe_table.sql create a function with the same name as epg_decribe_table
 
 After the successful execution of the script you can call the epg_decribe_table function as below. 
 
-``` call util.epg_describe_table('public','people');
+```
+call util.epg_describe_table('public','people');
+```
 
 ## output details
 
