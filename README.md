@@ -16,3 +16,97 @@ call util.epg_describe_table('public','people');
 
 This function writes the notice to the standart output and includes the following information about the table. 
 
+- table/schema ownership
+- table privileges
+- table grantee: assigned roles
+- table columns
+- index
+- table statistics
+
+## sample output
+
+```
+information for table: public.people
+
+----------------------
+table/schema ownership
+----------------------
+relation (table): people
+relation owner: postgres
+relation acl (privileges): {postgres=arwdDxt/postgres,audit=r/postgres,skynet=arwdDxt/postgres,readonly=r/postgres}
+namespace(schema): public
+namespace owner: pg_database_owner
+
+----------------
+table privileges
+----------------
+postgres                        INSERT          
+postgres                        SELECT          
+postgres                        UPDATE          
+postgres                        DELETE          
+postgres                        TRUNCATE        
+postgres                        REFERENCES      
+postgres                        TRIGGER         
+audit                           SELECT          
+skynet                          INSERT          
+skynet                          SELECT          
+skynet                          UPDATE          
+skynet                          DELETE          
+skynet                          TRUNCATE        
+skynet                          REFERENCES      
+skynet                          TRIGGER         
+readonly                        SELECT          
+
+-----------------------------
+table grantee: assigned roles
+-----------------------------
+audit:
+postgres:
+readonly:
+reporting_user -> readonly, 
+ro_user -> readonly, 
+skynet:
+
+-------------
+table columns
+-------------
+tableoid                        oid                             
+cmax                            cid                             
+xmax                            xid                             
+cmin                            cid                             
+xmin                            xid                             
+ctid                            tid                             
+id                              text                            
+firstname                       text                            
+lastname                        text                            
+phone                           text                            
+
+-------------
+index: 
+-------------
+ix_people_01
+
+CREATE INDEX ix_people_01 ON public.people USING btree (id)
+
+index columns: 
+id
+
+ix_people_02
+
+CREATE INDEX ix_people_02 ON public.people USING btree (firstname, lastname)
+
+index columns: 
+firstname
+lastname
+
+----------------
+table statistics
+----------------
+ dead_tuples: 0 
+ live_tuples: 4 
+ last_vacuum: <NULL> 
+ last_autovacuum: <NULL> 
+ vacuum_count: 0 
+ autovacuum_count: 0 
+```
+
